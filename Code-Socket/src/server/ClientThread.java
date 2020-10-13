@@ -26,7 +26,7 @@ public class ClientThread
 
 	ClientThread(ChatObserver co, Socket s) {
 		this.clientSocket = s;
-		int numero = (int) Math.random() * 100;
+		int numero = (int) (Math.random() * 100);
 		this.name = Integer.toString(numero);
 		this.chatObserver = co;
 		try {

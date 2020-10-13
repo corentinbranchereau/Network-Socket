@@ -7,8 +7,6 @@
 
 package client;
 
-import server.ChatObserver;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
