@@ -24,6 +24,8 @@ public class ClientThread
 
 	ClientThread(ChatObserver co, Socket s) {
 		this.clientSocket = s;
+		int numero = (int) Math.random() * 100;
+		this.name = Integer.toString(numero);
 		this.chatObserver = co;
 		try {
 			socIn = null;
@@ -55,6 +57,10 @@ public class ClientThread
 
 	public void sendMessage(String msg){
 		socOut.println(msg);
+	}
+
+	public String getClientName(){
+		return this.name;
 	}
 
 }
