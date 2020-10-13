@@ -46,7 +46,6 @@ public class EchoServerMultiThreaded implements ChatObserver {
 				System.out.println("Connexion from:" + clientSocket.getInetAddress());
 				ClientThread ct = new ClientThread(this,clientSocket);
 				ct.start();
-				clients.add(ct);
 			}
 		} catch (Exception e) {
 			System.err.println("Error in EchoServer:" + e);
@@ -56,7 +55,7 @@ public class EchoServerMultiThreaded implements ChatObserver {
 	@Override
 	public synchronized void onClientMessage(ClientThread client, String msg) {
 		for(ClientThread ct : this.clients){
-				ct.sendMessage(msg);
+				ct.sendMessage(client.getClientName()+" : "+msg);
 		}
 	}
 
@@ -65,7 +64,7 @@ public class EchoServerMultiThreaded implements ChatObserver {
 		//client.sendMessage("vous êtes connecté en tant que " + client.getClientName());
 		this.clients.add(client);
 		for(ClientThread c : clients) {
-			c.sendMessage(client.getClientName() + "has joined the chat");
+			c.sendMessage(client.getClientName() + " has joined the chat");
 		}
 		
 	}
@@ -75,7 +74,7 @@ public class EchoServerMultiThreaded implements ChatObserver {
 		client.sendMessage("vous êtes déconnecté");
 		this.clients.remove(client);
 		for(ClientThread c : clients) {
-			c.sendMessage(client.getClientName() + "has disconnected the chat");
+			c.sendMessage(client.getClientName() + " has disconnected the chat");
 		}
 	}
 }
