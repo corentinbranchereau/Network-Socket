@@ -56,7 +56,9 @@ public class EchoServerMultiThreaded implements ChatObserver {
 	@Override
 	public synchronized void onClientMessage(ClientThread client, String msg) {
 		for(ClientThread ct : this.clients){
-			ct.sendMessage(msg);
+			if( ct != client ){
+				ct.sendMessage(msg);
+			}
 		}
 	}
 
