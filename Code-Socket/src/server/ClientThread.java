@@ -19,19 +19,20 @@ public class ClientThread
 	private ChatObserver chatObserver;
 
 	//Stream
-	BufferedReader socIn;
+	DataInputStream socIn;
 	PrintStream socOut;
 
 	private String name;
 
 	ClientThread(ChatObserver co, Socket s) {
 		this.clientSocket = s;
-		int numero = (int) Math.random() * 100;
+		int numero = (int) (Math.random() * 100);
 		this.name = Integer.toString(numero);
 		this.chatObserver = co;
 		try {
 			socIn = null;
-			socIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			//socIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));*
+			socIn = new DataInputStream(clientSocket.getInputStream());
 			socOut = new PrintStream(clientSocket.getOutputStream());
 		} catch (Exception e){
 			System.err.println("Error in EchoServer (ClientThread Constructor) :" + e);
@@ -46,10 +47,17 @@ public class ClientThread
 		try {
 			chatObserver.onClientConnection(this);
 			while (true) {
-				String line = socIn.readLine();
-				socOut.println(line);
+				//String line = socIn.readLine();
+				//socOut.println(line);
 				//System.out.println(line);
-				chatObserver.onClientMessage(this,line);
+				int protocolType = socIn.readInt();
+				String msg = socIn.readUTF();
+				switch (protocolType){
+					case 0 :
+						System.out.println("Receive is from "+clientSocket.toString()+" with protocolType = "+protocolType+" and message : '"+msg+"'");
+						chatObserver.onClientMessage(this,msg);
+						break;
+				}
 			}
 		} catch (Exception e) {
 			System.err.println("Error in EchoServer:" + e);
@@ -58,7 +66,7 @@ public class ClientThread
 	}
 
 	public void sendMessage(String msg){
-		System.out.println("Envoi du msg "+msg+" sur socout par "+clientSocket.toString());
+		System.out.println("Envoi du msg '"+msg+"' sur socout par "+clientSocket.toString());
 		socOut.println(msg);
 	}
 
