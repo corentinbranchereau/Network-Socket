@@ -5,7 +5,7 @@
  * Authors: BRANCHEREAU Corentin, GRAVEY Thibaut
  */
 
-package stream;
+package server;
 
 public interface ChatObserver {
 

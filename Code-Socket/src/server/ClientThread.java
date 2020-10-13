@@ -5,7 +5,9 @@
  * Authors:
  */
 
-package stream;
+package server;
+
+import server.ChatObserver;
 
 import java.io.*;
 import java.net.*;
@@ -56,6 +58,7 @@ public class ClientThread
 	}
 
 	public void sendMessage(String msg){
+		System.out.println("Envoi du msg "+msg+" sur socout par "+clientSocket.toString());
 		socOut.println(msg);
 	}
 

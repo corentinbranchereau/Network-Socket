@@ -5,7 +5,7 @@
  * Authors:
  */
 
-package stream;
+package server;
 
 import java.net.*;
 import java.util.LinkedList;
