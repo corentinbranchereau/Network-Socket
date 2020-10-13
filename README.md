@@ -8,3 +8,4 @@ to run a java file that doesn't have its class file in the same folder, you need
 ex: sudo java -cp ../../classes stream.EchoServerMultiThreaded 80
 (here, the package name is stream, the file name EchoServerMultiThread)
 (don't know why, but if it doesn't work, i.e java.lang.ClassNotFoundException: EchoClient, try:  java EchoClient.java)
+java -cp ../../classes stream.EchoClient 127.0.0.1 80
