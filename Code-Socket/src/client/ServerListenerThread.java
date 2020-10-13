@@ -1,8 +1,8 @@
 /***
- * ClientThread
- * Example of a TCP server
- * Date: 14/12/08
- * Authors:
+ * ServerListenerThread
+ * Listen to server from client side
+ * Date: 13/10/20
+ * Authors: BRANCHEREAU Corentin, GRAVEY Thibaut
  */
 
 package client;
@@ -26,9 +26,14 @@ public class ServerListenerThread
 
 	public void run() {
 		while(true){
+
 			try {
 				String line = socIn.readLine();
-				System.out.println("Chat : "+line);
+				if(line==null){
+					System.out.println("Server lost...");
+					break;
+				}
+				System.out.println(line);
 			} catch (IOException e) {
 				System.err.println("Couldn't get I/O for "
 						+ "the connection to:"+ socket.getInetAddress());

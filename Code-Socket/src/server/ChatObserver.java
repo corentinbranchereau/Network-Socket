@@ -1,6 +1,6 @@
 /***
  * ChatObserver
- * Help to relay message
+ * An interface to relay message
  * Date: 13/10/2020
  * Authors: BRANCHEREAU Corentin, GRAVEY Thibaut
  */

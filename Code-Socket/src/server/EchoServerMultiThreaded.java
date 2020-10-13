@@ -1,19 +1,29 @@
 /***
  * EchoServer
- * Example of a TCP server
- * Date: 10/01/04
- * Authors:
+ * TCP server
+ * Date: 13/10/20
+ * Authors: BRANCHEREAU Corentin, GRAVEY Thibaut
  */
 
 package server;
 
 import java.net.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class EchoServerMultiThreaded implements ChatObserver {
 
 	List<ClientThread> clients;
+	ReadWriteLock lockClients = new ReentrantReadWriteLock();
+	List<String> history;
+	ReadWriteLock lockHistory = new ReentrantReadWriteLock();
+
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss - ");
 
 	/**
 	 * main method
@@ -33,6 +43,7 @@ public class EchoServerMultiThreaded implements ChatObserver {
 
 	public EchoServerMultiThreaded(){
 		clients = new LinkedList<>();
+		history = new ArrayList<>();
 	}
 
 	private void start(String[] args){
@@ -53,28 +64,79 @@ public class EchoServerMultiThreaded implements ChatObserver {
 	}
 
 	@Override
-	public synchronized void onClientMessage(ClientThread client, String msg) {
-		for(ClientThread ct : this.clients){
-				ct.sendMessage(client.getClientName()+" : "+msg);
+	public void onClientMessage(ClientThread client, String msg) {
+		try {
+			lockClients.readLock().lock();
+			lockHistory.writeLock().lock();
+			LocalDateTime now = LocalDateTime.now();
+			String toSend = dtf.format(now)+client.getClientName()+" : "+msg;
+			for (ClientThread ct : this.clients) {
+				ct.sendMessage(toSend);
+			}
+			history.add(toSend);
+		} finally {
+			lockHistory.writeLock().unlock();
+			lockClients.readLock().unlock();
 		}
 	}
 
 	@Override
-	public synchronized void onClientConnection(ClientThread client) {
+	public void onClientConnection(ClientThread client) {
 		//client.sendMessage("vous êtes connecté en tant que " + client.getClientName());
-		this.clients.add(client);
-		for(ClientThread c : clients) {
-			c.sendMessage(client.getClientName() + " has joined the chat");
+		try{
+			lockHistory.readLock().lock();
+			for(String oldMessage : history){
+				client.sendMessage(oldMessage);
+			}
+		} finally {
+			lockHistory.readLock().unlock();
 		}
-		
+
+		try {
+			lockClients.writeLock().lock();
+			this.clients.add(client);
+
+		} finally {
+			lockClients.writeLock().unlock();
+		}
+
+		try{
+			lockClients.readLock().lock();
+			lockHistory.writeLock().lock();
+			LocalDateTime now = LocalDateTime.now();
+			String toSend = dtf.format(now)+client.getClientName()+" has joined the chat";
+			for (ClientThread c : clients) {
+				c.sendMessage(toSend);
+			}
+			history.add(toSend);
+		} finally {
+			lockHistory.writeLock().unlock();
+			lockClients.readLock().unlock();
+		}
 	}
 
 	@Override
-	public synchronized void onClientDisconnection(ClientThread client) {
-		client.sendMessage("vous êtes déconnecté");
-		this.clients.remove(client);
-		for(ClientThread c : clients) {
-			c.sendMessage(client.getClientName() + " has disconnected the chat");
+	public void onClientDisconnection(ClientThread client) {
+
+		try{
+			lockClients.writeLock().lock();
+			this.clients.remove(client);
+		} finally {
+			lockClients.writeLock().unlock();
+		}
+
+		try {
+			lockClients.readLock().lock();
+			lockHistory.writeLock().lock();
+			LocalDateTime now = LocalDateTime.now();
+			String toSend = dtf.format(now)+client.getClientName()+" has disconnected the chat";
+			for(ClientThread c : clients) {
+				c.sendMessage(toSend);
+			}
+			history.add(toSend);
+		} finally {
+			lockHistory.writeLock().unlock();
+			lockClients.readLock().unlock();
 		}
 	}
 }

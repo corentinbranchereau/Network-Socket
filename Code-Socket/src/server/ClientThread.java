@@ -1,8 +1,8 @@
 /***
  * ClientThread
- * Example of a TCP server
- * Date: 14/12/08
- * Authors:
+ * Socket on a Thread to listen the client from Server side
+ * Date: 13/10/20
+ * Authors: BRANCHEREAU Corentin, GRAVEY Thibaut
  */
 
 package server;
@@ -45,19 +45,25 @@ public class ClientThread
 	 **/
 	public void run() {
 		try {
+			this.name=socIn.readUTF();
 			chatObserver.onClientConnection(this);
 			while (true) {
 				//String line = socIn.readLine();
 				//socOut.println(line);
 				//System.out.println(line);
 				int protocolType = socIn.readInt();
-				String msg = socIn.readUTF();
 				switch (protocolType){
 					case 0 :
+						String msg = socIn.readUTF();
 						System.out.println("Receive is from "+clientSocket.toString()+" with protocolType = "+protocolType+" and message : '"+msg+"'");
 						chatObserver.onClientMessage(this,msg);
 						break;
+					case 1 :
+						System.out.println("Receive is from "+clientSocket.toString()+" with protocolType = "+protocolType+" --> Disconnection");
+						chatObserver.onClientDisconnection(this);
+						break;
 				}
+				if(protocolType==1) break;
 			}
 		} catch (Exception e) {
 			System.err.println("Error in EchoServer:" + e);

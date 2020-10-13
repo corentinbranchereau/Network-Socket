@@ -1,8 +1,8 @@
 /***
  * EchoClient
- * Example of a TCP client 
- * Date: 10/01/04
- * Authors:
+ * TCP client
+ * Date: 13/10/20
+ * Authors: BRANCHEREAU Corentin, GRAVEY Thibaut
  */
 package client;
 
@@ -12,10 +12,12 @@ import java.net.*;
 public class EchoClient {
 
     //Stream
-    private static Socket echoSocket = null;
-    private static DataOutputStream socOut = null;
-    private static BufferedReader stdIn = null;
-    private static BufferedReader socIn = null;
+    private static Socket echoSocket;
+    private static DataOutputStream socOut;
+    private static BufferedReader stdIn;
+    private static BufferedReader socIn;
+
+    private static String name;
 
     /**
      *  main method
@@ -27,10 +29,12 @@ public class EchoClient {
         stdIn = null;
         socIn = null;
 
-        if (args.length != 2) {
-            System.out.println("Usage: java EchoClient <EchoServer host> <EchoServer port>");
+        if (args.length != 3) {
+            System.out.println("Usage: java EchoClient <EchoServer host> <EchoServer port> <Pseudo>");
             System.exit(1);
         }
+
+        name = args[2];
 
         try {
             // creation socket ==> connexion
@@ -39,6 +43,8 @@ public class EchoClient {
                     new InputStreamReader(echoSocket.getInputStream()));
             //socOut= new PrintStream(echoSocket.getOutputStream());
             socOut = new DataOutputStream(echoSocket.getOutputStream());
+            socOut.writeUTF(args[2]);
+            socOut.flush();
             stdIn = new BufferedReader(new InputStreamReader(System.in));
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host:" + args[0]);
@@ -55,9 +61,10 @@ public class EchoClient {
         String line;
         while (true) {
             line=stdIn.readLine();
-            if (line.equals(".")) break;
+            if (line==null || line.equals(".")) break;
             sendMessage(line);
         }
+        sendDisconnection();
 
         socOut.close();
         socIn.close();
@@ -72,6 +79,19 @@ public class EchoClient {
         try {
             socOut.writeInt(protocolType);
             socOut.writeUTF(msg);
+            socOut.flush();
+        } catch (IOException e) {
+            System.err.println("Couldn't get I/O for "
+                    + "the connection to:"+ echoSocket.getInetAddress());
+            System.exit(1);
+        }
+    }
+
+    public static void sendDisconnection(){
+        int protocolType = 1;
+
+        try {
+            socOut.writeInt(protocolType);
             socOut.flush();
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for "
