@@ -47,6 +47,7 @@ public class EchoClient {
         }
 
         ServerListenerThread serverListenerThread = new ServerListenerThread(echoSocket,socIn);
+        serverListenerThread.start();
 
         String line;
         while (true) {
