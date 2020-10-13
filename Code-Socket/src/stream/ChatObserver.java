@@ -1,8 +1,8 @@
 /***
- * EchoClient
- * Example of a TCP client 
- * Date: 10/01/04
- * Authors:
+ * ChatObserver
+ * Help to relay message
+ * Date: 13/10/2020
+ * Authors: BRANCHEREAU Corentin, GRAVEY Thibaut
  */
 
 package stream;

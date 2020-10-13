@@ -14,9 +14,13 @@ public class ClientThread
 		extends Thread {
 
 	private Socket clientSocket;
+	private ChatObserver chatObserver;
 
-	ClientThread(Socket s) {
+	private String name;
+
+	ClientThread(ChatObserver co, Socket s) {
 		this.clientSocket = s;
+		this.chatObserver = co;
 	}
 
 	/**
@@ -33,6 +37,7 @@ public class ClientThread
 				String line = socIn.readLine();
 				socOut.println(line);
 				System.out.println(line);
+				chatObserver.onClientMessage(this,line);
 			}
 		} catch (Exception e) {
 			System.err.println("Error in EchoServer:" + e);
