@@ -16,11 +16,22 @@ public class ClientThread
 	private Socket clientSocket;
 	private ChatObserver chatObserver;
 
+	//Stream
+	BufferedReader socIn;
+	PrintStream socOut;
+
 	private String name;
 
 	ClientThread(ChatObserver co, Socket s) {
 		this.clientSocket = s;
 		this.chatObserver = co;
+		try {
+			socIn = null;
+			socIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			socOut = new PrintStream(clientSocket.getOutputStream());
+		} catch (Exception e){
+			System.err.println("Error in EchoServer (ClientThread Constructor) :" + e);
+		}
 	}
 
 	/**
@@ -29,10 +40,6 @@ public class ClientThread
 	 **/
 	public void run() {
 		try {
-			BufferedReader socIn = null;
-			socIn = new BufferedReader(
-					new InputStreamReader(clientSocket.getInputStream()));
-			PrintStream socOut = new PrintStream(clientSocket.getOutputStream());
 			while (true) {
 				String line = socIn.readLine();
 				socOut.println(line);
@@ -42,6 +49,10 @@ public class ClientThread
 		} catch (Exception e) {
 			System.err.println("Error in EchoServer:" + e);
 		}
+	}
+
+	public void sendMessage(String msg){
+		socOut.println(msg);
 	}
 
 }
