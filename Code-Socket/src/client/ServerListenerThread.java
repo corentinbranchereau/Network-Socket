@@ -9,10 +9,7 @@ package client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class ServerListenerThread
 		extends Thread {
@@ -31,7 +28,7 @@ public class ServerListenerThread
 		while(true){
 			try {
 				String line = socIn.readLine();
-				System.out.println(line);
+				System.out.println("Chat : "+line);
 			} catch (IOException e) {
 				System.err.println("Couldn't get I/O for "
 						+ "the connection to:"+ socket.getInetAddress());
