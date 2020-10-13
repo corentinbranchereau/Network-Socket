@@ -54,18 +54,32 @@ public class EchoServerMultiThreaded implements ChatObserver {
 	}
 
 	@Override
-	public void onClientMessage(ClientThread client, String msg) {
-
+	public synchronized void onClientMessage(ClientThread client, String msg) {
+		for(ClientThread ct : this.clients){
+			ct.sendMessage(msg);
+		}
 	}
 
 	@Override
-	public void onClientConnection(ClientThread client) {
-
+	public synchronized void onClientConnection(ClientThread client) {
+		client.sendMessage("vous êtes connecté");
+		synchronized(clients) {
+			this.clients.add(client);
+			for(ClientThread c : clients) {
+				c.sendMessage("new client has joined the chat");
+			}
+		}
 	}
 
 	@Override
-	public void onClientDisconnetion(ClientThread client) {
-
+	public synchronized void onClientDisconnetion(ClientThread client) {
+		client.sendMessage("vous êtes déconnecté");
+		synchronized(clients) {
+			this.clients.remove(client);
+			for(ClientThread c : clients) {
+				c.sendMessage("new client has disconnected the chat");
+			}
+		}
 	}
 }
 
