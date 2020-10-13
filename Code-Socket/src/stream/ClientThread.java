@@ -40,14 +40,16 @@ public class ClientThread
 	 **/
 	public void run() {
 		try {
+			chatObserver.onClientConnection(this);
 			while (true) {
 				String line = socIn.readLine();
 				socOut.println(line);
-				System.out.println(line);
+				//System.out.println(line);
 				chatObserver.onClientMessage(this,line);
 			}
 		} catch (Exception e) {
 			System.err.println("Error in EchoServer:" + e);
+			chatObserver.onClientDisconnection(this);
 		}
 	}
 

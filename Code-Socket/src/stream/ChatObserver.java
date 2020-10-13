@@ -9,9 +9,9 @@ package stream;
 
 public interface ChatObserver {
 
-    public void onClientMessage(ClientThread client, String msg);
+    void onClientMessage(ClientThread client, String msg);
     
-    public void onClientConnection(ClientThread client);
+    void onClientConnection(ClientThread client);
 
-    public void onClientDisconnetion(ClientThread client);
+    void onClientDisconnection(ClientThread client);
 }
