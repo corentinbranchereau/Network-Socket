@@ -7,6 +7,7 @@
 
 package server;
 
+import java.io.*;
 import java.net.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,10 +19,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class EchoServerMultiThreaded implements ChatObserver {
 
-	List<ClientThread> clients;
-	ReadWriteLock lockClients = new ReentrantReadWriteLock();
-	List<String> history;
-	ReadWriteLock lockHistory = new ReentrantReadWriteLock();
+	private List<ClientThread> clients;
+	private ReadWriteLock lockClients = new ReentrantReadWriteLock();
+	private List<String> history;
+	private ReadWriteLock lockHistory = new ReentrantReadWriteLock();
+	private BufferedWriter logOut;
 
 	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss - ");
 
@@ -38,12 +40,46 @@ public class EchoServerMultiThreaded implements ChatObserver {
 
 		EchoServerMultiThreaded echoServerMultiThreaded = new EchoServerMultiThreaded();
 		echoServerMultiThreaded.start(args);
-
 	}
 
 	public EchoServerMultiThreaded(){
 		clients = new LinkedList<>();
 		history = new ArrayList<>();
+
+		//History Log
+		BufferedReader logIn = null;
+		File historyLog = new File("Code-Socket/lib/historyLog.txt");
+		try {
+			if(historyLog.createNewFile()){
+				System.out.println("History log file not found, creation...");
+			} else {
+				System.out.println("History log file found, loading...");
+			}
+		} catch (IOException e) {
+			System.out.println("An error occured with the history log file");
+			e.printStackTrace();
+		}
+
+		try{
+			logIn = new BufferedReader(new FileReader(historyLog));
+			String line = logIn.readLine();
+			lockHistory.writeLock().lock();
+			while(line!=null){
+				history.add(line);
+				line=logIn.readLine();
+			}
+			lockHistory.writeLock().unlock();
+		} catch (IOException e) {
+			System.out.println("An error occured with the history log reader");
+			e.printStackTrace();
+		} finally {
+			try {
+				logIn.close();
+				logOut = new BufferedWriter(new FileWriter(historyLog,true));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void start(String[] args){
@@ -63,19 +99,31 @@ public class EchoServerMultiThreaded implements ChatObserver {
 		}
 	}
 
+	private void addToHistory(String msg){
+		try{
+			lockHistory.writeLock().lock();
+			history.add(msg);
+			logOut.write(msg);
+			logOut.newLine();
+			logOut.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			lockHistory.writeLock().unlock();
+		}
+	}
+
 	@Override
 	public void onClientMessage(ClientThread client, String msg) {
 		try {
 			lockClients.readLock().lock();
-			lockHistory.writeLock().lock();
 			LocalDateTime now = LocalDateTime.now();
 			String toSend = dtf.format(now)+client.getClientName()+" : "+msg;
 			for (ClientThread ct : this.clients) {
 				ct.sendMessage(toSend);
 			}
-			history.add(toSend);
+			addToHistory(toSend);
 		} finally {
-			lockHistory.writeLock().unlock();
 			lockClients.readLock().unlock();
 		}
 	}
@@ -102,15 +150,13 @@ public class EchoServerMultiThreaded implements ChatObserver {
 
 		try{
 			lockClients.readLock().lock();
-			lockHistory.writeLock().lock();
 			LocalDateTime now = LocalDateTime.now();
 			String toSend = dtf.format(now)+client.getClientName()+" has joined the chat";
 			for (ClientThread c : clients) {
 				c.sendMessage(toSend);
 			}
-			history.add(toSend);
+			addToHistory(toSend);
 		} finally {
-			lockHistory.writeLock().unlock();
 			lockClients.readLock().unlock();
 		}
 	}
@@ -127,15 +173,13 @@ public class EchoServerMultiThreaded implements ChatObserver {
 
 		try {
 			lockClients.readLock().lock();
-			lockHistory.writeLock().lock();
 			LocalDateTime now = LocalDateTime.now();
 			String toSend = dtf.format(now)+client.getClientName()+" has disconnected the chat";
 			for(ClientThread c : clients) {
 				c.sendMessage(toSend);
 			}
-			history.add(toSend);
+			addToHistory(toSend);
 		} finally {
-			lockHistory.writeLock().unlock();
 			lockClients.readLock().unlock();
 		}
 	}
