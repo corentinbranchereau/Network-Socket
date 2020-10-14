@@ -60,6 +60,8 @@ public class ClientGUI implements ActionListener, WindowListener {
         tfPort = new JTextField(15);
         tfPseudo = new JTextField(15);
         connect = new JButton("Connect");
+        tfHost.setText("127.0.0.1");
+        tfPort.setText("1024");
         labelHost.setHorizontalAlignment(JLabel.CENTER);
         labelPort.setHorizontalAlignment(JLabel.CENTER);
         labelPseudo.setHorizontalAlignment(JLabel.CENTER);
