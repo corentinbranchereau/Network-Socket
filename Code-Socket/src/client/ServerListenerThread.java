@@ -7,6 +7,7 @@
 
 package client;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.Socket;
@@ -19,9 +20,13 @@ public class ServerListenerThread
 	//Stream
 	private BufferedReader socIn;
 
-	ServerListenerThread(Socket s, BufferedReader socIn) {
+	//GUI
+	private JTextArea textArea;
+
+	ServerListenerThread(Socket s, BufferedReader socIn, JTextArea textArea) {
 		this.socket = s;
 		this.socIn = socIn;
+		this.textArea = textArea;
 	}
 
 	public void run() {
@@ -33,7 +38,11 @@ public class ServerListenerThread
 					System.out.println("Server lost...");
 					break;
 				}
-				System.out.println(line);
+				if(textArea!=null) {
+					textArea.append(line+"\n");
+				} else {
+					System.out.println(line);
+				}
 			} catch (IOException e) {
 				System.err.println("Couldn't get I/O for "
 						+ "the connection to:"+ socket.getInetAddress());

@@ -55,7 +55,7 @@ public class EchoClient {
             System.exit(1);
         }
 
-        ServerListenerThread serverListenerThread = new ServerListenerThread(echoSocket,socIn);
+        ServerListenerThread serverListenerThread = new ServerListenerThread(echoSocket,socIn,null);
         serverListenerThread.start();
 
         String line;

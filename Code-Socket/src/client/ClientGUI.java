@@ -14,14 +14,32 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class ClientGUI implements ActionListener, WindowListener {
+
+    private boolean connected;
 
     private JButton connect;
     private JButton send;
     private JTextField tfEnter;
+    private JTextField tfHost;
+    private JTextField tfPort;
+    private JTextField tfPseudo;
+    private JTextArea textArea;
+
+    private static Socket echoSocket;
+    private static DataOutputStream socOut;
+    private static BufferedReader socIn;
 
     public ClientGUI(){
+        connected = false;
+
         //Create the frame
         JFrame frame = new JFrame("B01 Chat System");
 
@@ -38,9 +56,9 @@ public class ClientGUI implements ActionListener, WindowListener {
         JLabel labelHost = new JLabel("Host");
         JLabel labelPort = new JLabel("Port");
         JLabel labelPseudo = new JLabel("Pseudo");
-        JTextField tfHost = new JTextField(15);
-        JTextField tfPort = new JTextField(15);
-        JTextField tfPseudo = new JTextField(15);
+        tfHost = new JTextField(15);
+        tfPort = new JTextField(15);
+        tfPseudo = new JTextField(15);
         connect = new JButton("Connect");
         labelHost.setHorizontalAlignment(JLabel.CENTER);
         labelPort.setHorizontalAlignment(JLabel.CENTER);
@@ -57,7 +75,9 @@ public class ClientGUI implements ActionListener, WindowListener {
         panelTop.add(BorderLayout.SOUTH,subBot);
 
         //Center side
-        JTextArea ta = new JTextArea();
+        textArea = new JTextArea();
+        JScrollPane scroll = new JScrollPane(textArea);
+
 
         //Bottom side
         JPanel panelBottom = new JPanel();
@@ -67,6 +87,8 @@ public class ClientGUI implements ActionListener, WindowListener {
         panelBottom.add(labelEnter);
         panelBottom.add(tfEnter);
         panelBottom.add(send);
+        send.setEnabled(false);
+        tfEnter.setEnabled(false);
 
         //Listener
         connect.addActionListener(this);
@@ -75,7 +97,7 @@ public class ClientGUI implements ActionListener, WindowListener {
 
         //Add Components
         frame.getContentPane().add(BorderLayout.SOUTH, panelBottom);
-        frame.getContentPane().add(BorderLayout.CENTER,ta);
+        frame.getContentPane().add(BorderLayout.CENTER,scroll);
         frame.getContentPane().add(BorderLayout.NORTH,panelTop);
 
         //Display GUI
@@ -93,15 +115,98 @@ public class ClientGUI implements ActionListener, WindowListener {
             JButton toCompare = (JButton) source;
             if(toCompare==connect){
                 System.out.println("Connect");
+                if(!connected) {
+                    startSocket(tfHost.getText(), tfPort.getText(), tfPseudo.getText());
+                } else {
+                    sendDisconnection();
+                }
             } else if (toCompare==send){
-                System.out.println("Send !");
+                System.out.println("Send Message : "+tfEnter.getText());
+                sendMessage(tfEnter.getText());
+                tfEnter.selectAll();
+                tfEnter.replaceSelection("");
             }
         } else if (source instanceof JTextField){
             JTextField toCompare = (JTextField) source;
             if(toCompare==tfEnter){
                 System.out.println("Enter in Text Input !");
+                sendMessage(tfEnter.getText());
+                tfEnter.selectAll();
+                tfEnter.replaceSelection("");
             }
         }
+    }
+
+    public void startSocket(String host, String port, String name){
+        try {
+            // creation socket ==> connexion
+            echoSocket = new Socket(host,new Integer(port).intValue());
+            socIn = new BufferedReader(
+                    new InputStreamReader(echoSocket.getInputStream()));
+            socOut = new DataOutputStream(echoSocket.getOutputStream());
+            socOut.writeUTF(name);
+            socOut.flush();
+        } catch (UnknownHostException e) {
+            System.err.println("Don't know about host:" + host);
+            System.exit(1);
+        } catch (IOException e) {
+            System.err.println("Couldn't get I/O for "
+                    + "the connection to:"+ host);
+            System.exit(1);
+        }
+
+        ServerListenerThread serverListenerThread = new ServerListenerThread(echoSocket,socIn,textArea);
+        serverListenerThread.start();
+
+        connected=true;
+        tfHost.setEnabled(false);
+        tfPort.setEnabled(false);
+        tfPseudo.setEnabled(false);
+        connect.setText("Disconnect");
+        send.setEnabled(true);
+        tfEnter.setEnabled(true);
+
+    }
+
+    public void sendMessage(String msg){
+        //Generer le protocole pour envoyer un message
+        int protocolType = 0;
+
+        try {
+            socOut.writeInt(protocolType);
+            socOut.writeUTF(msg);
+            socOut.flush();
+        } catch (IOException e) {
+            System.err.println("Couldn't get I/O for "
+                    + "the connection to:"+ echoSocket.getInetAddress());
+            System.exit(1);
+        }
+    }
+
+    public void sendDisconnection(){
+        int protocolType = 1;
+
+        try {
+            socOut.writeInt(protocolType);
+            socOut.flush();
+
+            socOut.close();
+            socIn.close();
+            echoSocket.close();
+        } catch (IOException e) {
+            System.err.println("Couldn't get I/O for "
+                    + "the connection to:"+ echoSocket.getInetAddress());
+            System.exit(1);
+        }
+
+        tfHost.setEnabled(true);
+        tfPort.setEnabled(true);
+        tfPseudo.setEnabled(true);
+        connect.setText("Connect");
+        send.setEnabled(false);
+        tfEnter.setEnabled(false);
+
+        connected = false;
     }
 
     @Override
@@ -111,7 +216,10 @@ public class ClientGUI implements ActionListener, WindowListener {
 
     @Override
     public void windowClosing(WindowEvent e) {
-
+        System.out.println("Fermeture de l'application, socket connecté : "+connected);
+        if(connected){
+            sendDisconnection();
+        }
     }
 
     @Override
