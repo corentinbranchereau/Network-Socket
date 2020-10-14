@@ -116,12 +116,17 @@ public class ClientGUI implements ActionListener, WindowListener {
         if(source instanceof JButton){
             JButton toCompare = (JButton) source;
             if(toCompare==connect){
-                System.out.println("Connect");
-                if(!connected) {
-                    startSocket(tfHost.getText(), tfPort.getText(), tfPseudo.getText());
+                if(!tfPseudo.getText().isEmpty()){
+                    System.out.println("Connect");
+                    if(!connected) {
+                        startSocket(tfHost.getText(), tfPort.getText(), tfPseudo.getText());
+                    } else {
+                        sendDisconnection();
+                    }
                 } else {
-                    sendDisconnection();
+                    infosBox("You can't enter the chat with an empty pseudo.","Pseudo");
                 }
+
             } else if (toCompare==send){
                 System.out.println("Send Message : "+tfEnter.getText());
                 sendMessage(tfEnter.getText());
@@ -140,6 +145,7 @@ public class ClientGUI implements ActionListener, WindowListener {
     }
 
     public void startSocket(String host, String port, String name){
+        boolean error = false;
         try {
             // creation socket ==> connexion
             echoSocket = new Socket(host,new Integer(port).intValue());
@@ -150,27 +156,30 @@ public class ClientGUI implements ActionListener, WindowListener {
             socOut.flush();
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host:" + host);
-            System.exit(1);
+            infosBox("Don't know about host : "+host,"Host");
+            error = true;
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for "
                     + "the connection to:"+ host);
-            System.exit(1);
+            infosBox("Couldn't get I/O for the connection to : "+host,"I/O");
+            error = true;
         }
 
-        ServerListenerThread serverListenerThread = new ServerListenerThread(echoSocket,socIn,textArea);
-        serverListenerThread.start();
+        if(!error) {
+            ServerListenerThread serverListenerThread = new ServerListenerThread(echoSocket, socIn, textArea);
+            serverListenerThread.start();
 
-        connected=true;
-        tfHost.setEnabled(false);
-        tfPort.setEnabled(false);
-        tfPseudo.setEnabled(false);
-        connect.setText("Disconnect");
-        send.setEnabled(true);
-        tfEnter.setEnabled(true);
-
+            connected = true;
+            tfHost.setEnabled(false);
+            tfPort.setEnabled(false);
+            tfPseudo.setEnabled(false);
+            connect.setText("Disconnect");
+            send.setEnabled(true);
+            tfEnter.setEnabled(true);
+        }
     }
 
-    public void sendMessage(String msg){
+    private void sendMessage(String msg){
         //Generer le protocole pour envoyer un message
         int protocolType = 0;
 
@@ -209,6 +218,10 @@ public class ClientGUI implements ActionListener, WindowListener {
         tfEnter.setEnabled(false);
 
         connected = false;
+    }
+
+    private void infosBox(String infoMessage, String titleBar){
+        JOptionPane.showMessageDialog(null,infoMessage,"Error : "+titleBar,JOptionPane.ERROR_MESSAGE);
     }
 
     @Override
