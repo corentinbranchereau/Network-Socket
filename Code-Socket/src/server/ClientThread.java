@@ -24,6 +24,12 @@ public class ClientThread
 
 	private String name;
 
+	/**
+	 *  constructor
+	 *  initialize input/output stream
+	 * 	@param co ChatObserver
+	 * 	@param s Socket
+	 **/
 	ClientThread(ChatObserver co, Socket s) {
 		this.clientSocket = s;
 		int numero = (int) (Math.random() * 100);
@@ -40,8 +46,8 @@ public class ClientThread
 	}
 
 	/**
-	 * receives a request from client then sends an echo to the client
-	 * @param clientSocket the client socket
+	 * 	listen to the client socket input in order to format the message with protocol
+	 * 	then call a onClientMessage or onClientDisconnection event
 	 **/
 	public void run() {
 		try {
@@ -71,11 +77,18 @@ public class ClientThread
 		}
 	}
 
+	/**
+	 *  send a message to the client
+	 *  @param msg
+	 **/
 	public void sendMessage(String msg){
 		System.out.println("Envoi du msg '"+msg+"' sur socout par "+clientSocket.toString());
 		socOut.println(msg);
 	}
 
+	/**
+	 *  getter for the client name
+	 **/
 	public String getClientName(){
 		return this.name;
 	}

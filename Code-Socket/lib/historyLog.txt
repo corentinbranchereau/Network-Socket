@@ -30,3 +30,18 @@
 00:10:46 - Thibaut has joined the chat
 00:11:02 - Thibaut : insane
 00:15:14 - Thibaut has disconnected the chat
+00:25:31 - Test has joined the chat
+00:25:39 - Test has disconnected the chat
+12:34:45 - Thibaut has joined the chat
+12:35:03 - Adrien has joined the chat
+12:35:08 - Thibaut : Salut Adri !
+12:35:15 - Adrien : ça va la street ?
+12:35:22 - Thibaut has disconnected the chat
+12:35:38 - Adrien has disconnected the chat
+08:12:22 - Thibaut has joined the chat
+08:12:49 - Thibaut has disconnected the chat
+09:20:48 - Thibaut has joined the chat
+09:20:59 - Thibaut : Blabla
+09:21:02 - Thibaut has disconnected the chat
+09:21:10 - Corentin has joined the chat
+09:29:07 - Corentin has disconnected the chat
