@@ -29,8 +29,8 @@ public class EchoServerMultiThreaded implements ChatObserver {
 
 	/**
 	 * main method
+	 * launch the server listener thread
 	 * @param EchoServer port
-	 *
 	 **/
 	public static void main(String[] args){
 		if (args.length != 1) {
@@ -42,6 +42,10 @@ public class EchoServerMultiThreaded implements ChatObserver {
 		echoServerMultiThreaded.start(args);
 	}
 
+	/**
+	 *  constructor
+	 *  open the historyLog from file and create one if not exist
+	 **/
 	public EchoServerMultiThreaded(){
 		clients = new LinkedList<>();
 		history = new ArrayList<>();
@@ -82,6 +86,11 @@ public class EchoServerMultiThreaded implements ChatObserver {
 		}
 	}
 
+	/**
+	 *  start the listeningSocket and accept all the client
+	 *  then start the client
+	 * 	@param port
+	 **/
 	private void start(String[] args){
 		ServerSocket listenSocket;
 
@@ -99,6 +108,10 @@ public class EchoServerMultiThreaded implements ChatObserver {
 		}
 	}
 
+	/**
+	 *  add the message to the history
+	 * 	@param msg
+	 **/
 	private void addToHistory(String msg){
 		try{
 			lockHistory.writeLock().lock();
@@ -113,6 +126,9 @@ public class EchoServerMultiThreaded implements ChatObserver {
 		}
 	}
 
+	/**
+	 *  when a client send a message to the server, send the message to all connected participant
+	 **/
 	@Override
 	public void onClientMessage(ClientThread client, String msg) {
 		try {
@@ -128,6 +144,10 @@ public class EchoServerMultiThreaded implements ChatObserver {
 		}
 	}
 
+	/**
+	 *  when a client connect to the server, send him the whole historyLog and add it to the client list
+	 *  alert other client that a client joined the chat
+	 **/
 	@Override
 	public void onClientConnection(ClientThread client) {
 		//client.sendMessage("vous êtes connecté en tant que " + client.getClientName());
@@ -161,6 +181,10 @@ public class EchoServerMultiThreaded implements ChatObserver {
 		}
 	}
 
+	/**
+	 *  when a client disconnect, remove it from the client list
+	 *  alert other client that a client has disconnected the chat
+	 **/
 	@Override
 	public void onClientDisconnection(ClientThread client) {
 

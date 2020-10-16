@@ -23,12 +23,23 @@ public class ServerListenerThread
 	//GUI
 	private JTextArea textArea;
 
+	/**
+	 *  constructor
+	 * 	@param s the socket used by the server
+	 * 	@param socIn the BufferedReader for the socket's input stream
+	 * 	@param textArea the JTextArea for displaying the chat if Client's GUI is used
+	 *  accepts a connection, receives a message from client then sends an echo to the client
+	 **/
 	ServerListenerThread(Socket s, BufferedReader socIn, JTextArea textArea) {
 		this.socket = s;
 		this.socIn = socIn;
 		this.textArea = textArea;
 	}
 
+	/**
+	 *  run thread method
+	 *  listen to the input stream of the socket and write it on the terminal or the GUI
+	 **/
 	public void run() {
 		while(true){
 

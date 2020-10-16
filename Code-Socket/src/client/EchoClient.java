@@ -72,6 +72,10 @@ public class EchoClient {
         echoSocket.close();
     }
 
+    /**
+     *  send a message using the output stream of the socket
+     *  @param msg the message before protocol generation
+     **/
     public static void sendMessage(String msg){
         //Generer le protocole pour envoyer un message
         int protocolType = 0;
@@ -87,6 +91,9 @@ public class EchoClient {
         }
     }
 
+    /**
+     *  send a disconnection message to prevent the server with protocol
+     **/
     public static void sendDisconnection(){
         int protocolType = 1;
 

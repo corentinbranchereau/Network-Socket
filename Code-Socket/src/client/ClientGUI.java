@@ -37,6 +37,10 @@ public class ClientGUI implements ActionListener, WindowListener {
     private static DataOutputStream socOut;
     private static BufferedReader socIn;
 
+    /**
+     *  constructor
+     *  create the entire GUI with Swing
+     **/
     public ClientGUI(){
         connected = false;
 
@@ -106,10 +110,18 @@ public class ClientGUI implements ActionListener, WindowListener {
         frame.setVisible(true);
     }
 
+    /**
+     *  main method
+     *  launch the GUI
+     **/
     public static void main(String[] args){
         ClientGUI clientGUI = new ClientGUI();
     }
 
+    /**
+     *  action performed from listeners
+     *  listening to button and text input to interact with socket and GUI
+     **/
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -144,6 +156,9 @@ public class ClientGUI implements ActionListener, WindowListener {
         }
     }
 
+    /**
+     *  start the client socket for server communication
+     **/
     public void startSocket(String host, String port, String name){
         boolean error = false;
         try {
@@ -179,6 +194,10 @@ public class ClientGUI implements ActionListener, WindowListener {
         }
     }
 
+    /**
+     *  send a message using the output stream of the socket
+     *  @param msg the message before protocol generation
+     **/
     private void sendMessage(String msg){
         //Generer le protocole pour envoyer un message
         int protocolType = 0;
@@ -194,6 +213,9 @@ public class ClientGUI implements ActionListener, WindowListener {
         }
     }
 
+    /**
+     *  send a disconnection message to prevent the server with protocol
+     **/
     public void sendDisconnection(){
         int protocolType = 1;
 
@@ -220,6 +242,9 @@ public class ClientGUI implements ActionListener, WindowListener {
         connected = false;
     }
 
+    /**
+     *  alert the client from bad GUI input
+     **/
     private void infosBox(String infoMessage, String titleBar){
         JOptionPane.showMessageDialog(null,infoMessage,"Error : "+titleBar,JOptionPane.ERROR_MESSAGE);
     }
@@ -229,6 +254,9 @@ public class ClientGUI implements ActionListener, WindowListener {
 
     }
 
+    /**
+     *  close application when window is closing
+     **/
     @Override
     public void windowClosing(WindowEvent e) {
         System.out.println("Fermeture de l'application, socket connecté : "+connected);
