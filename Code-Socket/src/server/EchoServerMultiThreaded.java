@@ -1,19 +1,31 @@
 /***
  * EchoServer
- * Example of a TCP server
- * Date: 10/01/04
- * Authors:
+ * TCP server
+ * Date: 13/10/20
+ * Authors: BRANCHEREAU Corentin, GRAVEY Thibaut
  */
 
 package server;
 
+import java.io.*;
 import java.net.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class EchoServerMultiThreaded implements ChatObserver {
 
-	List<ClientThread> clients;
+	private List<ClientThread> clients;
+	private ReadWriteLock lockClients = new ReentrantReadWriteLock();
+	private List<String> history;
+	private ReadWriteLock lockHistory = new ReentrantReadWriteLock();
+	private BufferedWriter logOut;
+
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss - ");
 
 	/**
 	 * main method
@@ -28,11 +40,46 @@ public class EchoServerMultiThreaded implements ChatObserver {
 
 		EchoServerMultiThreaded echoServerMultiThreaded = new EchoServerMultiThreaded();
 		echoServerMultiThreaded.start(args);
-
 	}
 
 	public EchoServerMultiThreaded(){
 		clients = new LinkedList<>();
+		history = new ArrayList<>();
+
+		//History Log
+		BufferedReader logIn = null;
+		File historyLog = new File("Code-Socket/lib/historyLog.txt");
+		try {
+			if(historyLog.createNewFile()){
+				System.out.println("History log file not found, creation...");
+			} else {
+				System.out.println("History log file found, loading...");
+			}
+		} catch (IOException e) {
+			System.out.println("An error occured with the history log file");
+			e.printStackTrace();
+		}
+
+		try{
+			logIn = new BufferedReader(new FileReader(historyLog));
+			String line = logIn.readLine();
+			lockHistory.writeLock().lock();
+			while(line!=null){
+				history.add(line);
+				line=logIn.readLine();
+			}
+			lockHistory.writeLock().unlock();
+		} catch (IOException e) {
+			System.out.println("An error occured with the history log reader");
+			e.printStackTrace();
+		} finally {
+			try {
+				logIn.close();
+				logOut = new BufferedWriter(new FileWriter(historyLog,true));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void start(String[] args){
@@ -52,29 +99,88 @@ public class EchoServerMultiThreaded implements ChatObserver {
 		}
 	}
 
-	@Override
-	public synchronized void onClientMessage(ClientThread client, String msg) {
-		for(ClientThread ct : this.clients){
-				ct.sendMessage(client.getClientName()+" : "+msg);
+	private void addToHistory(String msg){
+		try{
+			lockHistory.writeLock().lock();
+			history.add(msg);
+			logOut.write(msg);
+			logOut.newLine();
+			logOut.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			lockHistory.writeLock().unlock();
 		}
 	}
 
 	@Override
-	public synchronized void onClientConnection(ClientThread client) {
+	public void onClientMessage(ClientThread client, String msg) {
+		try {
+			lockClients.readLock().lock();
+			LocalDateTime now = LocalDateTime.now();
+			String toSend = dtf.format(now)+client.getClientName()+" : "+msg;
+			for (ClientThread ct : this.clients) {
+				ct.sendMessage(toSend);
+			}
+			addToHistory(toSend);
+		} finally {
+			lockClients.readLock().unlock();
+		}
+	}
+
+	@Override
+	public void onClientConnection(ClientThread client) {
 		//client.sendMessage("vous êtes connecté en tant que " + client.getClientName());
-		this.clients.add(client);
-		for(ClientThread c : clients) {
-			c.sendMessage(client.getClientName() + " has joined the chat");
+		try{
+			lockHistory.readLock().lock();
+			for(String oldMessage : history){
+				client.sendMessage(oldMessage);
+			}
+		} finally {
+			lockHistory.readLock().unlock();
 		}
-		
+
+		try {
+			lockClients.writeLock().lock();
+			this.clients.add(client);
+
+		} finally {
+			lockClients.writeLock().unlock();
+		}
+
+		try{
+			lockClients.readLock().lock();
+			LocalDateTime now = LocalDateTime.now();
+			String toSend = dtf.format(now)+client.getClientName()+" has joined the chat";
+			for (ClientThread c : clients) {
+				c.sendMessage(toSend);
+			}
+			addToHistory(toSend);
+		} finally {
+			lockClients.readLock().unlock();
+		}
 	}
 
 	@Override
-	public synchronized void onClientDisconnection(ClientThread client) {
-		client.sendMessage("vous êtes déconnecté");
-		this.clients.remove(client);
-		for(ClientThread c : clients) {
-			c.sendMessage(client.getClientName() + " has disconnected the chat");
+	public void onClientDisconnection(ClientThread client) {
+
+		try{
+			lockClients.writeLock().lock();
+			this.clients.remove(client);
+		} finally {
+			lockClients.writeLock().unlock();
+		}
+
+		try {
+			lockClients.readLock().lock();
+			LocalDateTime now = LocalDateTime.now();
+			String toSend = dtf.format(now)+client.getClientName()+" has disconnected the chat";
+			for(ClientThread c : clients) {
+				c.sendMessage(toSend);
+			}
+			addToHistory(toSend);
+		} finally {
+			lockClients.readLock().unlock();
 		}
 	}
 }
