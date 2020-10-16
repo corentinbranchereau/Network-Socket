@@ -1,32 +1,56 @@
 package multicast;
+
 import java.net.*;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 
 
 public class MulticastClient {
 
-// Group IP address
-InetAddress groupAddr = InetAddress.getByName("228.5.6.7");
-Integer groupPort = 6789;
-// Create a multicast socket
-MulticastSocket s = new MulticastSocket(groupPort);
-// Join the group
+   private static InetAddress groupAddr;
+   private static int groupPort;
+   private static String clientName;
+   private static BufferedReader stdIn;
 
-s.joinGroup(groupAddr);
-// Build a datagram packet for a message
-// to send to the group
-String msg = "Hello";
-DatagramPacket hi = new DatagramPacket(msg.getBytes(),
-msg.length(), groupAddr, groupPort);
-// Send a multicast message to the group
-s.@send(hi);
-// Build a datagram packet for response
-byte[] buf = new byte[1000];
-DatagramPacket recv = new
-DatagramPacket(buf, buf.length);
 
-// Receive a datagram packet response
-s.receive(recv);
-// OK, I'm done talking - leave the group
-s.leaveGroup(groupAddr); 
+public static void main(String[] args){
+    try{
+    // Group IP address
+    
+    // Create a multicast socket
+        if (args.length != 3) {
+            System.out.println("Usage: java MulticastClient <EchoServer host> <EchoServer port> <Name>");
+            System.exit(1);
+        }
+        //Peuplement des variables
+        groupAddr = InetAddress.getByName(args[0]);
+        groupPort = Integer.parseInt(args[1]);
+        clientName = args[2];
+        stdIn = new BufferedReader(new InputStreamReader(System.in));
+    
+        MulticastSocket multiSocket = new MulticastSocket(groupPort);
+        // Join the group
+        multiSocket.joinGroup(groupAddr);
+
+        MulticastSender multicastSender = new MulticastSender(multiSocket,stdIn,groupAddr,groupPort,clientName);
+        multicastSender.start();
+
+        MulticastReceiver multicastReceiver = new MulticastReceiver(multiSocket,clientName);
+        multicastReceiver.start();
+
+
+
+
+
+        // OK, I'm done talking - leave the group
+        //multiSocket.leaveGroup(groupAddr); 
+        //multiSocket.close();
+
+    }catch(Exception e){
+        System.out.println(e);
+    }
+
+}
+
 }
