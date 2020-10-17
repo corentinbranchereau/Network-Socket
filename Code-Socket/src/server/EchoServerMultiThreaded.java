@@ -25,7 +25,7 @@ public class EchoServerMultiThreaded implements ChatObserver {
 	private ReadWriteLock lockHistory = new ReentrantReadWriteLock();
 	private BufferedWriter logOut;
 
-	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss - ");
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
 	/**
 	 * main method
@@ -134,7 +134,7 @@ public class EchoServerMultiThreaded implements ChatObserver {
 		try {
 			lockClients.readLock().lock();
 			LocalDateTime now = LocalDateTime.now();
-			String toSend = dtf.format(now)+client.getClientName()+" : "+msg;
+			String toSend = "["+dtf.format(now)+"] "+client.getClientName()+" : "+msg;
 			for (ClientThread ct : this.clients) {
 				ct.sendMessage(toSend);
 			}
@@ -171,7 +171,7 @@ public class EchoServerMultiThreaded implements ChatObserver {
 		try{
 			lockClients.readLock().lock();
 			LocalDateTime now = LocalDateTime.now();
-			String toSend = dtf.format(now)+client.getClientName()+" has joined the chat";
+			String toSend = "["+dtf.format(now)+"] "+client.getClientName()+" has joined the chat";
 			for (ClientThread c : clients) {
 				c.sendMessage(toSend);
 			}
@@ -198,7 +198,7 @@ public class EchoServerMultiThreaded implements ChatObserver {
 		try {
 			lockClients.readLock().lock();
 			LocalDateTime now = LocalDateTime.now();
-			String toSend = dtf.format(now)+client.getClientName()+" has disconnected the chat";
+			String toSend = "["+dtf.format(now)+"] "+client.getClientName()+" has disconnected the chat";
 			for(ClientThread c : clients) {
 				c.sendMessage(toSend);
 			}

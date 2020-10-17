@@ -39,10 +39,6 @@ public static void main(String[] args){
         MulticastReceiver multicastReceiver = new MulticastReceiver(multiSocket,clientName);
         multicastReceiver.start();
 
-
-
-
-
         // OK, I'm done talking - leave the group
         //multiSocket.leaveGroup(groupAddr); 
         //multiSocket.close();

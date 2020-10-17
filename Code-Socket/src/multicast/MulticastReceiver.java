@@ -1,10 +1,8 @@
 package multicast;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import utils.Message;
+
 import java.net.*;
-import java.nio.charset.StandardCharsets;
 
 public class MulticastReceiver extends Thread {
 
@@ -26,9 +24,9 @@ public class MulticastReceiver extends Thread {
             multicastSocket.receive(recv);
             //String s = new String(buf, StandardCharsets.UTF_8);
             Message message = new Message(null,null,null);
-            Message m2 = message.readMessage(buf);
-            if(!m2.getName().equals(this.clientName)){
-                System.out.println(m2);
+            message.readMessage(buf);
+            if(!message.getName().equals(this.clientName)){
+                System.out.println(message);
             }
 
 		} catch (Exception e) {

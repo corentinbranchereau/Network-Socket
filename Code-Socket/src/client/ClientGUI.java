@@ -140,10 +140,14 @@ public class ClientGUI implements ActionListener, WindowListener {
                 }
 
             } else if (toCompare==send){
-                System.out.println("Send Message : "+tfEnter.getText());
-                sendMessage(tfEnter.getText());
-                tfEnter.selectAll();
-                tfEnter.replaceSelection("");
+                if(tfEnter.getText().isEmpty()){
+                    infosBox("You can't send an empty message","Empty message");
+                } else {
+                    System.out.println("Send Message : " + tfEnter.getText());
+                    sendMessage(tfEnter.getText());
+                    tfEnter.selectAll();
+                    tfEnter.replaceSelection("");
+                }
             }
         } else if (source instanceof JTextField){
             JTextField toCompare = (JTextField) source;

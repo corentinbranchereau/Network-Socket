@@ -1,47 +1,60 @@
-23:27:34 - Thibaut has joined the chat
-23:27:38 - Corentin has joined the chat
-23:27:41 - Thibaut : Salut
-23:27:45 - Corentin : Hey
-23:27:47 - Corentin : ça va ?
-23:27:51 - Thibaut : Bien et toi?
-23:27:54 - Corentin : Super !
-23:27:58 - Corentin : A+
-23:27:59 - Corentin has disconnected the chat
-23:28:19 - Thibaut : Ciao
-23:28:28 - Killian has joined the chat
-23:28:30 - Killian : Olà
-23:28:37 - Thibaut has disconnected the chat
-23:28:40 - Killian : Ah ok
-23:28:41 - Killian has disconnected the chat
-23:30:06 - Thomas has joined the chat
-23:30:16 - Thomas : Sympa je vois que ça parle sans moi
-23:30:17 - Thomas has disconnected the chat
-23:31:02 - Louis has joined the chat
-23:31:08 - Louis : J'avoue ça respecte R
-23:31:10 - Louis has disconnected the chat
-23:31:23 - Quentin has joined the chat
-23:31:25 - Quentin : Carré
-23:31:43 - Quentin has disconnected the chat
-23:31:53 - Sylvain has joined the chat
-23:31:55 - Sylvain : First
-23:31:56 - Sylvain has disconnected the chat
-00:09:34 - Thibaut has joined the chat
-00:09:51 - Thibaut : Ah ouais stylé
-00:10:46 - Thibaut has joined the chat
-00:11:02 - Thibaut : insane
-00:15:14 - Thibaut has disconnected the chat
-00:25:31 - Test has joined the chat
-00:25:39 - Test has disconnected the chat
-12:34:45 - Thibaut has joined the chat
-12:35:03 - Adrien has joined the chat
-12:35:08 - Thibaut : Salut Adri !
-12:35:15 - Adrien : ça va la street ?
-12:35:22 - Thibaut has disconnected the chat
-12:35:38 - Adrien has disconnected the chat
-08:12:22 - Thibaut has joined the chat
-08:12:49 - Thibaut has disconnected the chat
-09:20:48 - Thibaut has joined the chat
-09:20:59 - Thibaut : Blabla
-09:21:02 - Thibaut has disconnected the chat
-09:21:10 - Corentin has joined the chat
-09:29:07 - Corentin has disconnected the chat
+[13-10-2020 23:27:34] Thibaut has joined the chat
+[13-10-2020 23:27:38] Corentin has joined the chat
+[13-10-2020 23:27:41] Thibaut : Salut
+[13-10-2020 23:27:45] Corentin : Hey
+[13-10-2020 23:27:47] Corentin : ça va ?
+[13-10-2020 23:27:51] Thibaut : Bien et toi?
+[13-10-2020 23:27:54] Corentin : Super !
+[13-10-2020 23:27:58] Corentin : A+
+[13-10-2020 23:27:59] Corentin has disconnected the chat
+[13-10-2020 23:28:19] Thibaut : Ciao
+[13-10-2020 23:28:28] Killian has joined the chat
+[13-10-2020 23:28:30] Killian : Olà
+[13-10-2020 23:28:37] Thibaut has disconnected the chat
+[13-10-2020 23:28:40] Killian : Ah ok
+[13-10-2020 23:28:41] Killian has disconnected the chat
+[13-10-2020 23:30:06] Thomas has joined the chat
+[13-10-2020 23:30:16] Thomas : Sympa je vois que ça parle sans moi
+[13-10-2020 23:30:17] Thomas has disconnected the chat
+[13-10-2020 23:31:02] Louis has joined the chat
+[13-10-2020 23:31:08] Louis : J'avoue ça respecte R
+[13-10-2020 23:31:10] Louis has disconnected the chat
+[13-10-2020 23:31:23] Quentin has joined the chat
+[13-10-2020 23:31:25] Quentin : Carré
+[13-10-2020 23:31:43] Quentin has disconnected the chat
+[13-10-2020 23:31:53] Sylvain has joined the chat
+[13-10-2020 23:31:55] Sylvain : First
+[13-10-2020 23:31:56] Sylvain has disconnected the chat
+[14-10-2020 00:09:34] Thibaut has joined the chat
+[14-10-2020 00:09:51] Thibaut : Ah ouais stylé
+[14-10-2020 00:10:46] Thibaut has joined the chat
+[14-10-2020 00:11:02] Thibaut : insane
+[14-10-2020 00:15:14] Thibaut has disconnected the chat
+[14-10-2020 00:25:31] Test has joined the chat
+[14-10-2020 00:25:39] Test has disconnected the chat
+[14-10-2020 12:34:45] Thibaut has joined the chat
+[14-10-2020 12:35:03] Adrien has joined the chat
+[14-10-2020 12:35:08] Thibaut : Salut Adri !
+[14-10-2020 12:35:15] Adrien : ça va la street ?
+[14-10-2020 12:35:22] Thibaut has disconnected the chat
+[14-10-2020 12:35:38] Adrien has disconnected the chat
+[16-10-2020 08:12:22] Thibaut has joined the chat
+[16-10-2020 08:12:49] Thibaut has disconnected the chat
+[16-10-2020 09:20:48] Thibaut has joined the chat
+[16-10-2020 09:20:59] Thibaut : Blabla
+[16-10-2020 09:21:02] Thibaut has disconnected the chat
+[16-10-2020 09:21:10] Corentin has joined the chat
+[16-10-2020 09:29:07] Corentin has disconnected the chat
+[17-10-2020 15:47:09] Thibaut has joined the chat
+[17-10-2020 15:47:21] Thibaut has disconnected the chat
+[17-10-2020 15:48:01] Corentin has joined the chat
+[17-10-2020 15:48:05] Thibaut has joined the chat
+[17-10-2020 15:48:08] Thibaut : Hello
+[17-10-2020 15:48:16] Corentin : Better like this
+[17-10-2020 15:48:50] Corentin has disconnected the chat
+[17-10-2020 15:48:51] Thibaut has disconnected the chat
+[17-10-2020 16:01:36] Thibaut has joined the chat
+[17-10-2020 16:01:41] Thibaut : its working now
+[17-10-2020 16:01:54] Thibaut has disconnected the chat
+[17-10-2020 16:03:17] Quentin has joined the chat
+[17-10-2020 16:03:23] Quentin has disconnected the chat

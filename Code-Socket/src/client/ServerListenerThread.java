@@ -51,6 +51,7 @@ public class ServerListenerThread
 				}
 				if(textArea!=null) {
 					textArea.append(line+"\n");
+					textArea.setCaretPosition(textArea.getDocument().getLength());
 				} else {
 					System.out.println(line);
 				}
