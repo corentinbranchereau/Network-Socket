@@ -1,3 +1,11 @@
+/***
+ * MulticastClient
+ * UDP Client that connects to a multicast group
+ * Date: 13/10/20
+ * @author BRANCHEREAU Corentin
+ * @author GRAVEY Thibaut
+ */
+
 package multicast;
 
 import java.net.*;
@@ -13,7 +21,14 @@ public class MulticastClient {
    private static String clientName;
    private static BufferedReader stdIn;
 
-
+/**
+   * main method
+   * connects to a multicast group and launchs two threads, one to receive and one to send messages
+   * @see MulticastReceiver the thread that listens for other client's messages
+   * @see MulticastSender the thread that listens for user input, to send messages
+   * @param args await 3 String params: an IP address, the port, and the client Name. 
+   * 
+   **/
 public static void main(String[] args){
     try{
     // Group IP address

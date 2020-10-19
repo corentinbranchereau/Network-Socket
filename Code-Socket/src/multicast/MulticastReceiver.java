@@ -1,7 +1,14 @@
+/***
+ * MulticastReceiver
+ * Thread that listens for messages sent to the multicast group, and print the received messages
+ * Date: 13/10/20
+ * @author BRANCHEREAU Corentin
+ * @author GRAVEY Thibaut
+ */
+
 package multicast;
 
 import utils.Message;
-
 import java.net.*;
 
 public class MulticastReceiver extends Thread {
@@ -9,11 +16,19 @@ public class MulticastReceiver extends Thread {
     private MulticastSocket multicastSocket;
     private String clientName;
     
+    /**
+     * Constructor of MulticastReceiver
+     * @param multiSocket save the Socket where the client is connected
+     * @param clientName save the clientName
+     */
     MulticastReceiver(MulticastSocket multiSocket, String clientName){
         this.multicastSocket = multiSocket;
         this.clientName = clientName;
     }
 
+/**
+ * method that runs indefinitely to listen for received messages, and print them when one is receive
+ */
     public void run() {
 		while(true){
 
