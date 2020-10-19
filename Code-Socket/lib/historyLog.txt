@@ -58,3 +58,7 @@
 [17-10-2020 16:01:54] Thibaut has disconnected the chat
 [17-10-2020 16:03:17] Quentin has joined the chat
 [17-10-2020 16:03:23] Quentin has disconnected the chat
+[19-10-2020 22:10:47] Thibaut has joined the chat
+[19-10-2020 22:10:53] Thibaut has disconnected the chat
+[19-10-2020 22:13:49] Corentin has joined the chat
+[19-10-2020 22:13:57] Corentin has disconnected the chat

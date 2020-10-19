@@ -1,13 +1,12 @@
-/***
+/**
  * ClientThread
- * Socket on a Thread to listen the client from Server side
+ * Socket on a Thread to listen the tcp.client from Server side
  * Date: 13/10/20
- * Authors: BRANCHEREAU Corentin, GRAVEY Thibaut
+ * @author BRANCHEREAU Corentin
+ * @author GRAVEY Thibaut
  */
 
-package server;
-
-import server.ChatObserver;
+package tcp.server;
 
 import java.io.*;
 import java.net.*;
@@ -26,9 +25,9 @@ public class ClientThread
 
 	/**
 	 *  constructor
-	 *  initialize input/output stream
-	 * 	@param co ChatObserver
-	 * 	@param s Socket
+	 * 	@param co observer to prevent Client Thread
+	 * 	@param s the tcp.client socket that we listen to
+	 *	@see ClientThread
 	 **/
 	ClientThread(ChatObserver co, Socket s) {
 		this.clientSocket = s;
@@ -46,8 +45,10 @@ public class ClientThread
 	}
 
 	/**
-	 * 	listen to the client socket input in order to format the message with protocol
-	 * 	then call a onClientMessage or onClientDisconnection event
+	 * 	listen to the tcp.client socket input in order to format the message with protocol
+	 * 	then call a onClientMessage or onClientDisconnection event from the ChatObserver
+	 * 	depends on protocolType
+	 * @see ChatObserver
 	 **/
 	public void run() {
 		try {
@@ -78,7 +79,7 @@ public class ClientThread
 	}
 
 	/**
-	 *  send a message to the client
+	 *  send a message to the tcp.client
 	 *  @param msg
 	 **/
 	public void sendMessage(String msg){
@@ -87,7 +88,8 @@ public class ClientThread
 	}
 
 	/**
-	 *  getter for the client name
+	 *  getter for the tcp.client name
+	 * @return the name of the tcp.client
 	 **/
 	public String getClientName(){
 		return this.name;

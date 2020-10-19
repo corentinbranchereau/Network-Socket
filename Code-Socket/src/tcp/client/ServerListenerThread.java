@@ -1,11 +1,12 @@
-/***
+/**
  * ServerListenerThread
- * Listen to server from client side
+ * Listen to tcp.server from tcp.client side
  * Date: 13/10/20
- * Authors: BRANCHEREAU Corentin, GRAVEY Thibaut
+ * @author BRANCHEREAU Corentin
+ * @author GRAVEY Thibaut
  */
 
-package client;
+package tcp.client;
 
 import javax.swing.*;
 import java.io.BufferedReader;
@@ -25,11 +26,11 @@ public class ServerListenerThread
 
 	/**
 	 *  constructor
-	 * 	@param s the socket used by the server
+	 * 	@param s the socket used by the tcp.server
 	 * 	@param socIn the BufferedReader for the socket's input stream
 	 * 	@param textArea the JTextArea for displaying the chat if Client's GUI is used
-	 *  accepts a connection, receives a message from client then sends an echo to the client
-	 **/
+	 *  accepts a connection, receives a message from tcp.client then sends an echo to the tcp.client
+	 */
 	ServerListenerThread(Socket s, BufferedReader socIn, JTextArea textArea) {
 		this.socket = s;
 		this.socIn = socIn;
@@ -37,9 +38,9 @@ public class ServerListenerThread
 	}
 
 	/**
-	 *  run thread method
+	 *  running the current thread
 	 *  listen to the input stream of the socket and write it on the terminal or the GUI
-	 **/
+	 */
 	public void run() {
 		while(true){
 

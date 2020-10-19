@@ -1,10 +1,11 @@
-/***
+/**
  * EchoClient
- * TCP client
+ * TCP tcp.client
  * Date: 13/10/20
- * Authors: BRANCHEREAU Corentin, GRAVEY Thibaut
+ * @author BRANCHEREAU Corentin
+ * @author GRAVEY Thibaut
  */
-package client;
+package tcp.client;
 
 import java.io.*;
 import java.net.*;
@@ -21,7 +22,11 @@ public class EchoClient {
 
     /**
      *  main method
-     *  accepts a connection, receives a message from client then sends an echo to the client
+     *  initialize the socket with the TCP tcp.server,
+     *  wait for user's input and send it to the tcp.server.
+     *  It also launched a ServerListenerThread.
+     * @see ServerListenerThread
+     * @param args wait for 3 parameters : host, port, name
      **/
     public static void main(String[] args) throws IOException {
         echoSocket = null;
@@ -92,7 +97,7 @@ public class EchoClient {
     }
 
     /**
-     *  send a disconnection message to prevent the server with protocol
+     *  send a disconnection message to prevent the tcp.server with right protocol
      **/
     public static void sendDisconnection(){
         int protocolType = 1;

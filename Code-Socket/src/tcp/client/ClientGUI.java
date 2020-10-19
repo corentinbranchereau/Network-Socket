@@ -1,12 +1,12 @@
-/***
+/**
  * ClientGUI
- * A simple GUI for client side chat system
+ * A simple GUI for TCP tcp.client side chat system
  * Date: 13/10/20
- * Authors: BRANCHEREAU Corentin, GRAVEY Thibaut
+ * @author BRANCHEREAU Corentin
+ * @author GRAVEY Thibaut
  */
 
-package client;
-
+package tcp.client;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,7 +40,7 @@ public class ClientGUI implements ActionListener, WindowListener {
     /**
      *  constructor
      *  create the entire GUI with Swing
-     **/
+     */
     public ClientGUI(){
         connected = false;
 
@@ -84,7 +84,6 @@ public class ClientGUI implements ActionListener, WindowListener {
         textArea = new JTextArea();
         JScrollPane scroll = new JScrollPane(textArea);
 
-
         //Bottom side
         JPanel panelBottom = new JPanel();
         JLabel labelEnter = new JLabel("Text Input");
@@ -100,6 +99,7 @@ public class ClientGUI implements ActionListener, WindowListener {
         connect.addActionListener(this);
         send.addActionListener(this);
         tfEnter.addActionListener(this);
+        tfPseudo.addActionListener(this);
 
         //Add Components
         frame.getContentPane().add(BorderLayout.SOUTH, panelBottom);
@@ -113,22 +113,24 @@ public class ClientGUI implements ActionListener, WindowListener {
     /**
      *  main method
      *  launch the GUI
-     **/
+     * @param args empty
+     */
     public static void main(String[] args){
-        ClientGUI clientGUI = new ClientGUI();
+        new ClientGUI();
     }
 
     /**
-     *  action performed from listeners
+     *  action performed from the different listeners
      *  listening to button and text input to interact with socket and GUI
-     **/
+     * @param e linked event
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if(source instanceof JButton){
             JButton toCompare = (JButton) source;
             if(toCompare==connect){
-                if(!tfPseudo.getText().isEmpty()){
+                if(!(tfPseudo.getText().isEmpty() || tfPseudo.getText().isBlank())){
                     System.out.println("Connect");
                     if(!connected) {
                         startSocket(tfHost.getText(), tfPort.getText(), tfPseudo.getText());
@@ -156,13 +158,28 @@ public class ClientGUI implements ActionListener, WindowListener {
                 sendMessage(tfEnter.getText());
                 tfEnter.selectAll();
                 tfEnter.replaceSelection("");
+            } else if(toCompare==tfPseudo){
+                System.out.println("Enter in Pseudo Input !");
+                if(!(tfPseudo.getText().isEmpty() || tfPseudo.getText().isBlank())){
+                    System.out.println("Connect");
+                    if(!connected) {
+                        startSocket(tfHost.getText(), tfPort.getText(), tfPseudo.getText());
+                    } else {
+                        sendDisconnection();
+                    }
+                } else {
+                    infosBox("You can't enter the chat with an empty pseudo.","Pseudo");
+                }
             }
         }
     }
 
     /**
-     *  start the client socket for server communication
-     **/
+     *  start the tcp.client socket for tcp.server communication
+     * @param host adress from the host tcp.server
+     * @param port port from the host tcp.server
+     * @param name tcp.client name
+     */
     public void startSocket(String host, String port, String name){
         boolean error = false;
         try {
@@ -200,8 +217,8 @@ public class ClientGUI implements ActionListener, WindowListener {
 
     /**
      *  send a message using the output stream of the socket
-     *  @param msg the message before protocol generation
-     **/
+     *  @param msg the message before the generation of the protocol
+     */
     private void sendMessage(String msg){
         //Generer le protocole pour envoyer un message
         int protocolType = 0;
@@ -218,8 +235,8 @@ public class ClientGUI implements ActionListener, WindowListener {
     }
 
     /**
-     *  send a disconnection message to prevent the server with protocol
-     **/
+     *  send a disconnection message to prevent the TCP tcp.server
+     */
     public void sendDisconnection(){
         int protocolType = 1;
 
@@ -247,12 +264,15 @@ public class ClientGUI implements ActionListener, WindowListener {
     }
 
     /**
-     *  alert the client from bad GUI input
-     **/
+     *  alert the tcp.client from a bad GUI input with a popup
+     */
     private void infosBox(String infoMessage, String titleBar){
         JOptionPane.showMessageDialog(null,infoMessage,"Error : "+titleBar,JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * not used
+     */
     @Override
     public void windowOpened(WindowEvent e) {
 
@@ -260,7 +280,7 @@ public class ClientGUI implements ActionListener, WindowListener {
 
     /**
      *  close application when window is closing
-     **/
+     */
     @Override
     public void windowClosing(WindowEvent e) {
         System.out.println("Fermeture de l'application, socket connecté : "+connected);
@@ -269,26 +289,41 @@ public class ClientGUI implements ActionListener, WindowListener {
         }
     }
 
+    /**
+     * not used
+     */
     @Override
     public void windowClosed(WindowEvent e) {
 
     }
 
+    /**
+     * not used
+     */
     @Override
     public void windowIconified(WindowEvent e) {
 
     }
 
+    /**
+     * not used
+     */
     @Override
     public void windowDeiconified(WindowEvent e) {
 
     }
 
+    /**
+     * not used
+     */
     @Override
     public void windowActivated(WindowEvent e) {
 
     }
 
+    /**
+     * not used
+     */
     @Override
     public void windowDeactivated(WindowEvent e) {
 
