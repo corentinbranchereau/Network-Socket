@@ -26,7 +26,7 @@ public class MulticastClient {
    * connects to a multicast group and launchs two threads, one to receive and one to send messages
    * @see MulticastReceiver the thread that listens for other client's messages
    * @see MulticastSender the thread that listens for user input, to send messages
-   * @param args await 3 String params: an IP address, the port, and the client Name. 
+   * @param args await 3 String params: an IP address, the port, and the client Name.hp options
    * 
    **/
 public static void main(String[] args){
@@ -53,10 +53,6 @@ public static void main(String[] args){
 
         MulticastReceiver multicastReceiver = new MulticastReceiver(multiSocket,clientName);
         multicastReceiver.start();
-
-        // OK, I'm done talking - leave the group
-        //multiSocket.leaveGroup(groupAddr); 
-        //multiSocket.close();
 
     }catch(Exception e){
         System.out.println(e);

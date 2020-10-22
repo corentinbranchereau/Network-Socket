@@ -51,14 +51,12 @@ public class MulticastSender extends Thread {
                 Message message = new Message(msg,this.clientName,new Date());
                 message.sendMessage(this.multicastSocket,this.groupAddr, this.groupPort);
                 if(msg.equals(".")){
-                    System.out.println("disconnetion");
+                    System.out.println("disconnection");
                     multicastSocket.leaveGroup(groupAddr); 
                     multicastSocket.close();
                     break;
                 }
-				// Build a datagram packet for a message
-                // to send to the group
-               
+
 
 			} catch (Exception e) {
 				System.err.println(e);
