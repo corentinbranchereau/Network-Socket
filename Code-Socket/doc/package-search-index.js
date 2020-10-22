@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"multicast"},{"l":"tcp.client"},{"l":"tcp.server"},{"l":"utils"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"multicast"},{"l":"tcp.client"},{"l":"tcp.server"}]

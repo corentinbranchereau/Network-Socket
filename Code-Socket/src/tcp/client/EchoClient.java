@@ -1,3 +1,8 @@
+package tcp.client;
+
+import java.io.*;
+import java.net.*;
+
 /**
  * EchoClient
  * TCP tcp.client
@@ -5,24 +10,33 @@
  * @author BRANCHEREAU Corentin
  * @author GRAVEY Thibaut
  */
-package tcp.client;
-
-import java.io.*;
-import java.net.*;
-
 public class EchoClient {
 
     //Stream
+    /**
+     * The TCP socket for client side of the chat system
+     */
     private static Socket echoSocket;
+    /**
+     * Data output for the client socket
+     */
     private static DataOutputStream socOut;
+    /**
+     * Buffered Reader for standard input stream from the terminal (System.in)
+     */
     private static BufferedReader stdIn;
+    /**
+     * Buffered reader for input of the client socket
+     */
     private static BufferedReader socIn;
 
+    /**
+     * Name of the TCP client
+     */
     private static String name;
 
     /**
-     *  main method
-     *  initialize the socket with the TCP tcp.server,
+     *  Initialize the socket with the TCP tcp.server,
      *  wait for user's input and send it to the tcp.server.
      *  It also launched a ServerListenerThread.
      * @see ServerListenerThread
@@ -78,7 +92,7 @@ public class EchoClient {
     }
 
     /**
-     *  send a message using the output stream of the socket
+     *  Send a message using the output stream of the socket
      *  @param msg the message before protocol generation
      **/
     public static void sendMessage(String msg){
@@ -97,7 +111,7 @@ public class EchoClient {
     }
 
     /**
-     *  send a disconnection message to prevent the tcp.server with right protocol
+     *  Send a disconnection message to prevent the tcp.server with right protocol
      **/
     public static void sendDisconnection(){
         int protocolType = 1;

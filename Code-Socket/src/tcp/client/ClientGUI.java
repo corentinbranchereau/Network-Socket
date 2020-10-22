@@ -1,11 +1,3 @@
-/**
- * ClientGUI
- * A simple GUI for TCP tcp.client side chat system
- * Date: 13/10/20
- * @author BRANCHEREAU Corentin
- * @author GRAVEY Thibaut
- */
-
 package tcp.client;
 
 import javax.swing.*;
@@ -21,16 +13,47 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/**
+ * ClientGUI
+ * A simple GUI for TCP tcp.client side chat system
+ * Date: 13/10/20
+ * @author BRANCHEREAU Corentin
+ * @author GRAVEY Thibaut
+ */
 public class ClientGUI implements ActionListener, WindowListener {
 
+    /**
+     * Client state for TCP connection
+     */
     private boolean connected;
 
+    /**
+     * Connection button
+     */
     private JButton connect;
+    /**
+     * Send a message button
+     */
     private JButton send;
+    /**
+     * Message input textfield
+     */
     private JTextField tfEnter;
+    /**
+     * Host input textfield
+     */
     private JTextField tfHost;
+    /**
+     * Port input textfield
+     */
     private JTextField tfPort;
+    /**
+     * Name of the client input textfield
+     */
     private JTextField tfPseudo;
+    /**
+     * Area to display message from the chat system
+     */
     private JTextArea textArea;
 
     private static Socket echoSocket;
@@ -38,8 +61,7 @@ public class ClientGUI implements ActionListener, WindowListener {
     private static BufferedReader socIn;
 
     /**
-     *  constructor
-     *  create the entire GUI with Swing
+     *  Create the entire GUI with Swing
      */
     public ClientGUI(){
         connected = false;
@@ -111,8 +133,7 @@ public class ClientGUI implements ActionListener, WindowListener {
     }
 
     /**
-     *  main method
-     *  launch the GUI
+     *  Launch the GUI
      * @param args empty
      */
     public static void main(String[] args){
@@ -120,7 +141,7 @@ public class ClientGUI implements ActionListener, WindowListener {
     }
 
     /**
-     *  action performed from the different listeners
+     *  Action performed from the different listeners, for example
      *  listening to button and text input to interact with socket and GUI
      * @param e linked event
      */
@@ -175,7 +196,7 @@ public class ClientGUI implements ActionListener, WindowListener {
     }
 
     /**
-     *  start the tcp.client socket for tcp.server communication
+     *  Start the tcp.client socket for tcp.server communication
      * @param host adress from the host tcp.server
      * @param port port from the host tcp.server
      * @param name tcp.client name
@@ -216,7 +237,7 @@ public class ClientGUI implements ActionListener, WindowListener {
     }
 
     /**
-     *  send a message using the output stream of the socket
+     *  Send a message using the output stream of the socket
      *  @param msg the message before the generation of the protocol
      */
     private void sendMessage(String msg){
@@ -235,7 +256,7 @@ public class ClientGUI implements ActionListener, WindowListener {
     }
 
     /**
-     *  send a disconnection message to prevent the TCP tcp.server
+     *  Send a disconnection message to prevent the TCP tcp.server
      */
     public void sendDisconnection(){
         int protocolType = 1;
@@ -264,14 +285,14 @@ public class ClientGUI implements ActionListener, WindowListener {
     }
 
     /**
-     *  alert the tcp.client from a bad GUI input with a popup
+     *  Alert the tcp.client from a bad GUI input with a popup
      */
     private void infosBox(String infoMessage, String titleBar){
         JOptionPane.showMessageDialog(null,infoMessage,"Error : "+titleBar,JOptionPane.ERROR_MESSAGE);
     }
 
     /**
-     * not used
+     * Not used
      */
     @Override
     public void windowOpened(WindowEvent e) {
@@ -279,7 +300,7 @@ public class ClientGUI implements ActionListener, WindowListener {
     }
 
     /**
-     *  close application when window is closing
+     *  Close application when window is closing
      */
     @Override
     public void windowClosing(WindowEvent e) {
@@ -290,7 +311,7 @@ public class ClientGUI implements ActionListener, WindowListener {
     }
 
     /**
-     * not used
+     * Not used
      */
     @Override
     public void windowClosed(WindowEvent e) {
@@ -298,7 +319,7 @@ public class ClientGUI implements ActionListener, WindowListener {
     }
 
     /**
-     * not used
+     * Not used
      */
     @Override
     public void windowIconified(WindowEvent e) {
@@ -306,7 +327,7 @@ public class ClientGUI implements ActionListener, WindowListener {
     }
 
     /**
-     * not used
+     * Not used
      */
     @Override
     public void windowDeiconified(WindowEvent e) {
@@ -314,7 +335,7 @@ public class ClientGUI implements ActionListener, WindowListener {
     }
 
     /**
-     * not used
+     * Not used
      */
     @Override
     public void windowActivated(WindowEvent e) {
@@ -322,7 +343,7 @@ public class ClientGUI implements ActionListener, WindowListener {
     }
 
     /**
-     * not used
+     * Not used
      */
     @Override
     public void windowDeactivated(WindowEvent e) {

@@ -1,11 +1,3 @@
-/**
- * EchoServerMultiThread
- * TCP tcp.server
- * Date: 13/10/20
- * @author BRANCHEREAU Corentin
- * @author GRAVEY Thibaut
- */
-
 package tcp.server;
 
 import java.io.*;
@@ -18,19 +10,42 @@ import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * EchoServerMultiThread
+ * TCP tcp.server
+ * Date: 13/10/20
+ * @author BRANCHEREAU Corentin
+ * @author GRAVEY Thibaut
+ */
 public class EchoServerMultiThreaded implements ChatObserver {
 
+	/**
+	 * List of all connected TCP Clients
+	 */
 	private List<ClientThread> clients;
+	/**
+	 * Lock (mutex) for mutual exclusion (thread-safety) on the client list
+	 */
 	private ReadWriteLock lockClients = new ReentrantReadWriteLock();
+	/**
+	 * History of all interaction with the server (connection, disconnection and message)
+	 */
 	private List<String> history;
+	/**
+	 * Lock (mutex) for mutual exclusion (thread-safety) on the history
+	 */
 	private ReadWriteLock lockHistory = new ReentrantReadWriteLock();
+	/**
+	 * Standard output stream on the history log file for external storage
+	 */
 	private BufferedWriter logOut;
-
+	/**
+	 * Date Time formatter for message displaying
+	 */
 	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
 	/**
-	 * main method
-	 * launch the tcp.server listener thread
+	 * Launch the tcp.server listener thread
 	 * @param args port from the tcp.server
 	 **/
 	public static void main(String[] args){
@@ -44,8 +59,7 @@ public class EchoServerMultiThreaded implements ChatObserver {
 	}
 
 	/**
-	 *  constructor
-	 *  open the historyLog from 'historyLog.text' (create one if not exist)
+	 *  Open the historyLog from 'historyLog.text' (create one if not exist)
 	 *  then load thread-safely the historyLog in list
 	 **/
 	public EchoServerMultiThreaded(){
@@ -89,10 +103,10 @@ public class EchoServerMultiThreaded implements ChatObserver {
 	}
 
 	/**
-	 *  start the listeningSocket and accept all the tcp.client
+	 *  Start the listeningSocket and accept all the tcp.client
 	 *  then start a ClientThread per tcp.client
-	 * @see ClientThread
-	 * 	@param port
+	 * 	@see ClientThread
+	 * 	@param args first argument is the server port
 	 **/
 	private void start(String[] args){
 		ServerSocket listenSocket;
@@ -112,7 +126,7 @@ public class EchoServerMultiThreaded implements ChatObserver {
 	}
 
 	/**
-	 *  thread-safely add a message to the history
+	 *  Thread-safely add a message to the history
 	 * 	@param msg the message
 	 **/
 	private void addToHistory(String msg){
@@ -130,7 +144,7 @@ public class EchoServerMultiThreaded implements ChatObserver {
 	}
 
 	/**
-	 *  when a tcp.client send a message to the tcp.server, send the message to all connected participant
+	 *  When a tcp.client send a message to the tcp.server, send the message to all connected participant
 	 * @param msg the message to send
 	 * @param client the tcp.client thread involved in the communication
 	 **/
@@ -150,7 +164,7 @@ public class EchoServerMultiThreaded implements ChatObserver {
 	}
 
 	/**
-	 *  when a tcp.client connect to the tcp.server, send him the whole historyLog and thread-safely add it
+	 *  When a tcp.client connect to the tcp.server, send him the whole historyLog and thread-safely add it
 	 *  to the tcp.client list, then alert other tcp.client that a tcp.client joined the chat
 	 **/
 	@Override
@@ -187,7 +201,7 @@ public class EchoServerMultiThreaded implements ChatObserver {
 	}
 
 	/**
-	 *  when a tcp.client disconnect, thread-safely remove it from the tcp.client list then,
+	 *  When a tcp.client disconnect, thread-safely remove it from the tcp.client list then,
 	 *  alert other tcp.client that a tcp.client has disconnected the chat
 	 **/
 	@Override
